@@ -1,3 +1,4 @@
+
 import {
   Accordion,
   AccordionContent,
@@ -7,6 +8,8 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 const faqItems = [
   {
@@ -31,13 +34,38 @@ const faqItems = [
   },
 ];
 
+const newsItems = [
+    {
+        title: 'How we’re using AI to help build a circular economy',
+        source: 'Google Blog',
+        snippet: 'Learn how AI is helping to design out waste and pollution, keep products and materials in use, and regenerate natural systems.',
+        url: 'https://blog.google/outreach-initiatives/sustainability/circular-economy-ai/',
+        imageId: 'education-news-1',
+    },
+    {
+        title: 'New ways we’re helping you live more sustainably',
+        source: 'The Keyword',
+        snippet: 'Discover new features in Google products that make it easier to find sustainable options, from travel to shopping.',
+        url: 'https://blog.google/products/search/new-ways-were-helping-you-live-more-sustainably/',
+        imageId: 'education-news-2',
+    },
+    {
+        title: 'A new, more comprehensive view of our climate action',
+        source: 'Google Sustainability',
+        snippet: 'Explore Google\'s latest environmental report for a deeper look at their progress toward a carbon-free future.',
+        url: 'https://sustainability.google/reports/environmental-report-2023/',
+        imageId: 'education-news-3',
+    }
+];
+
+
 export default function EducationPage() {
   const recyclingImg = PlaceHolderImages.find(p => p.id === 'education-recycling');
   const compostingImg = PlaceHolderImages.find(p => p.id === 'education-composting');
   
   return (
     <div className="container mx-auto max-w-4xl p-4 md:p-6 lg:p-8">
-      <div className="space-y-8">
+      <div className="space-y-12">
         <section className="text-center">
           <h1 className="text-3xl font-bold font-headline">Knowledge Hub</h1>
           <p className="mt-2 text-lg text-muted-foreground">
@@ -74,6 +102,39 @@ export default function EducationPage() {
               </CardContent>
             </Card>
           </div>
+        </section>
+        
+        <section>
+            <h2 className="text-2xl font-bold font-headline mb-4 text-center">Recent News from Google</h2>
+            <div className="grid gap-6 md:grid-cols-1">
+                {newsItems.map((item, index) => {
+                    const image = PlaceHolderImages.find(p => p.id === item.imageId);
+                    return (
+                        <Link href={item.url} target="_blank" rel="noopener noreferrer" key={index} className="block group">
+                            <Card className="overflow-hidden transition-shadow hover:shadow-lg">
+                                <div className="md:flex">
+                                    {image && (
+                                        <div className="md:w-1/3 relative aspect-video md:aspect-auto">
+                                            <Image src={image.imageUrl} alt={item.title} fill className="object-cover" data-ai-hint={image.imageHint}/>
+                                        </div>
+                                    )}
+                                    <div className="md:w-2/3 flex flex-col">
+                                        <CardHeader>
+                                            <CardTitle className="text-lg group-hover:text-primary transition-colors">{item.title}</CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="flex-grow">
+                                            <p className="text-sm text-muted-foreground">{item.snippet}</p>
+                                        </CardContent>
+                                        <CardContent className="flex justify-end items-center gap-2 text-sm font-semibold text-primary">
+                                            Read More <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                        </CardContent>
+                                    </div>
+                                </div>
+                            </Card>
+                        </Link>
+                    )
+                })}
+            </div>
         </section>
 
         <section>
