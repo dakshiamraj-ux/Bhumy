@@ -9,8 +9,8 @@ import { LanguageProvider } from '@/context/language-provider';
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'Bhumy',
-  description: 'An app for a sustainable future.',
+  title: 'Bhumy - Smart Waste, Clean Earth',
+  description: 'Bhumy is an AI-powered circular waste management platform designed to help you build a sustainable future.',
 };
 
 export default function RootLayout({
