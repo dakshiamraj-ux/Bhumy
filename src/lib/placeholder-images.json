@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "dashboard-hero",
+      "description": "A lush green landscape representing a healthy environment.",
+      "imageUrl": "https://images.unsplash.com/photo-1615118265620-d8decf628275?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8bmF0dXJlJTIwbGFuZHNjYXBlfGVufDB8fHx8MTc2MjgwNDc3OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "nature landscape"
+    },
+    {
+      "id": "marketplace-item-1",
+      "description": "A product made from recycled materials.",
+      "imageUrl": "https://images.unsplash.com/photo-1726999850561-2f09e8f8738c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxyZWN5Y2xlZCUyMHByb2R1Y3R8ZW58MHx8fHwxNzYyODgwMzc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "recycled product"
+    },
+    {
+      "id": "marketplace-item-2",
+      "description": "Handmade art from upcycled items.",
+      "imageUrl": "https://images.unsplash.com/photo-1691430596542-19240cc2c038?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1cGN5Y2xlZCUyMGFydHxlbnwwfHx8fDE3NjI4NDM0NzN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "upcycled art"
+    },
+    {
+      "id": "marketplace-item-3",
+      "description": "A bundle of compost for gardening.",
+      "imageUrl": "https://images.unsplash.com/photo-1541779123709-488a159406aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxnYXJkZW5pbmclMjBjb21wb3N0fGVufDB8fHx8MTc2Mjg4MDM3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gardening compost"
+    },
+    {
+      "id": "marketplace-item-4",
+      "description": "Eco-friendly cleaning supplies.",
+      "imageUrl": "https://images.unsplash.com/photo-1615290144628-8fa0f0d61658?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlY28lMjBmcmllbmRseXxlbnwwfHx8fDE3NjI4NjgxNDh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eco friendly"
+    },
+    {
+      "id": "education-recycling",
+      "description": "Image illustrating the recycling process.",
+      "imageUrl": "https://images.unsplash.com/photo-1587831968842-d3ea13fb7281?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxyZWN5Y2xpbmclMjBwcm9jZXNzfGVufDB8fHx8MTc2Mjg4MDM3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "recycling process"
+    },
+    {
+      "id": "education-composting",
+      "description": "Image of a compost bin.",
+      "imageUrl": "https://images.unsplash.com/photo-1542739674-b449a8938b59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjb21wb3N0JTIwYmlufGVufDB8fHx8MTc2Mjg4MDM3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "compost bin"
+    },
+    {
+      "id": "user-avatar",
+      "description": "Avatar for a user profile.",
+      "imageUrl": "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjI4MDgwNTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    }
+  ]
 }
