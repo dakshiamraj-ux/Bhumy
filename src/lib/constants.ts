@@ -91,3 +91,5 @@ export const PAGE_TITLES: { [key: string]: PageTitle } = {
   chat: { href: '/chat', titleKey: 'page_titles.chat' },
   education: { href: '/education', titleKey: 'page_titles.education' },
 };
+
+export const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://your-production-url.com' : 'http://localhost:9002';

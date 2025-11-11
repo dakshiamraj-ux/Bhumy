@@ -11,6 +11,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 export const metadata: Metadata = {
   title: 'Bhumy - Smart Waste, Clean Earth',
   description: 'Bhumy is an AI-powered circular waste management platform designed to help you build a sustainable future.',
+  manifest: '/manifest.ts'
 };
 
 export default function RootLayout({
