@@ -36,10 +36,10 @@ const faqItems = [
 
 const newsItems = [
     {
-        title: 'How we’re using AI to help build a circular economy',
+        title: 'How AI is helping to build a more sustainable future',
         source: 'Google Blog',
         snippet: 'Learn how AI is helping to design out waste and pollution, keep products and materials in use, and regenerate natural systems.',
-        url: 'https://blog.google/outreach-initiatives/sustainability/google-circular-economy-ai/',
+        url: 'https://blog.google/outreach-initiatives/sustainability/how-ai-is-helping-to-build-a-more-sustainable-future/',
         imageId: 'education-news-1',
     },
     {
@@ -50,10 +50,10 @@ const newsItems = [
         imageId: 'education-news-2',
     },
     {
-        title: 'Our new Environmental Report is here',
+        title: 'Our third-party verified environmental report',
         source: 'Google Sustainability',
         snippet: 'Explore Google\'s latest environmental report for a deeper look at their progress toward a carbon-free future.',
-        url: 'https://sustainability.google/reports/environmental-report/',
+        url: 'https://sustainability.google/reports/environmental-report-2023/',
         imageId: 'education-news-3',
     }
 ];
