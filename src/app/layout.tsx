@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Gaia Loop',
+  title: 'Bhumy',
   description: 'An app for a sustainable future.',
 };
 

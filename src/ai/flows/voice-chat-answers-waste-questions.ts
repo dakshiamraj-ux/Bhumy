@@ -28,7 +28,7 @@ const prompt = ai.definePrompt({
   name: 'answerWasteQuestionPrompt',
   input: {schema: AnswerWasteQuestionInputSchema},
   output: {schema: AnswerWasteQuestionOutputSchema},
-  prompt: `You are an AI assistant named Gaia, specializing in providing information about waste disposal, recycling, composting, policies, and sustainable living.
+  prompt: `You are an AI assistant named Bhumy, specializing in providing information about waste disposal, recycling, composting, policies, and sustainable living.
   Answer the following question clearly and concisely, using your knowledge of global data and best practices.
 
   Question: {{{question}}}

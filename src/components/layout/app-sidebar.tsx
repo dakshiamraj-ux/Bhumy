@@ -28,7 +28,7 @@ export function AppSidebar() {
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Leaf className="h-6 w-6" />
           </div>
-          <span className="text-lg font-semibold">Gaia Loop</span>
+          <span className="text-lg font-semibold">Bhumy</span>
         </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
@@ -58,7 +58,7 @@ export function AppSidebar() {
           </Avatar>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="font-medium">Guest User</span>
-            <span className="text-xs text-muted-foreground">guest@gaialoop.com</span>
+            <span className="text-xs text-muted-foreground">guest@bhumy.com</span>
           </div>
         </div>
       </SidebarFooter>

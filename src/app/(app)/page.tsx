@@ -37,7 +37,7 @@ export default function DashboardPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-0 left-0 p-6">
             <h1 className="text-3xl font-bold text-white md:text-4xl font-headline">
-              Welcome to Gaia Loop
+              Welcome to Bhumy
             </h1>
             <p className="mt-2 text-lg text-primary-foreground/90">
               Your partner in building a sustainable future.

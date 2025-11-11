@@ -56,9 +56,9 @@ export const NAV_LINKS: NavLink[] = [
   },
   {
     href: '/chat',
-    label: 'Gaia Chat',
+    label: 'Bhumy Chat',
     icon: Mic,
-    tooltip: 'Chat with Gaia',
+    tooltip: 'Chat with Bhumy',
   },
   {
     href: '/education',
@@ -75,6 +75,6 @@ export const PAGE_TITLES: { [key: string]: string } = {
   '/rewards': 'Community Rewards',
   '/marketplace': 'Waste-to-Value Marketplace',
   '/policy-advisor': 'AI Local Policy Advisor',
-  '/chat': 'Chat with Gaia',
+  '/chat': 'Chat with Bhumy',
   '/education': 'Environmental Education Hub',
 };
