@@ -47,9 +47,13 @@ export function BhumyChat() {
       const response = await answerWasteQuestion({ question: input });
       const assistantMessage: Message = { role: 'assistant', content: response.answer };
       setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting answer:', error);
-      const errorMessage: Message = { role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' };
+      let errorMessageContent = 'Sorry, I encountered an error. Please try again.';
+      if (error.message && error.message.includes('503 Service Unavailable')) {
+        errorMessageContent = "I'm currently experiencing high demand. Please wait a moment and try your question again.";
+      }
+      const errorMessage: Message = { role: 'assistant', content: errorMessageContent };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
