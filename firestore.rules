@@ -1,3 +1,4 @@
+
 /**
  * @file Firestore Security Rules for Bhumy - AI-Powered Circular Waste Management App
  * @core_philosophy This ruleset enforces a strict user-ownership model for private user data and allows public read access for certain collections (rewards, articles).
@@ -58,6 +59,25 @@ service cloud.firestore {
       allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
       allow delete: if isExistingOwner(userId);
     }
+    
+    /**
+     * @description Rules for smart devices under a user's profile.
+     * @path /users/{userId}/devices/{deviceId}
+     * @allow (create, read, list) User with ID 'user123' can manage their own devices.
+     *   - request.auth.uid: 'user123'
+     * @deny (create) User with ID 'user456' cannot create a device for 'user123'.
+     *   - request.auth.uid: 'user456'
+     * @deny (update) An external device cannot update its fill level without proper auth (future implementation).
+     * @principle Enforces user ownership for device registration and management.
+     */
+    match /users/{userId}/devices/{deviceId} {
+      allow get, list: if isOwner(userId);
+      
+      allow create: if isOwner(userId) && request.resource.data.userId == userId;
+      // Allow updates only by the owner. In a real scenario, a device would use a specific, more secure auth method.
+      allow update: if isExistingOwner(userId);
+      allow delete: if isExistingOwner(userId);
+    }
 
     /**
      * @description Rules for waste scans under a user's profile.
@@ -73,8 +93,7 @@ service cloud.firestore {
      * @principle Enforces document ownership for writes. Restricts access to a user's own data tree.
      */
     match /users/{userId}/wasteScans/{wasteScanId} {
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
+      allow get, list: if isOwner(userId);
 
       allow create: if isOwner(userId) && request.resource.data.userId == userId;
       allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
@@ -84,20 +103,13 @@ service cloud.firestore {
     /**
      * @description Rules for reward information.
      * @path /rewards/{rewardId}
-     * @allow (get) Anyone can read reward information.
-     * @allow (list) Anyone can list reward information.
-     * @deny (create) No one can create a reward.
-     * @deny (update) No one can update a reward.
-     * @deny (delete) No one can delete a reward.
+     * @allow (get, list) Anyone can read reward information.
+     * @deny (create, update, delete) No one can modify rewards directly.
      * @principle Publicly accessible data with no write permissions.
      */
     match /rewards/{rewardId} {
-      allow get: if true;
-      allow list: if true;
-
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow get, list: if true;
+      allow write: if false;
     }
 
     /**
@@ -114,8 +126,7 @@ service cloud.firestore {
      * @principle Enforces document ownership for writes. Restricts access to a user's own data tree.
      */
     match /users/{userId}/redemptions/{redemptionId} {
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
+      allow get, list: if isOwner(userId);
 
       allow create: if isOwner(userId) && request.resource.data.userId == userId;
       allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
@@ -136,8 +147,7 @@ service cloud.firestore {
      * @principle Enforces document ownership for writes. Restricts access to a user's own data tree.
      */
     match /users/{userId}/listings/{listingId} {
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
+      allow get, list: if isOwner(userId);
 
       allow create: if isOwner(userId) && request.resource.data.userId == userId;
       allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
@@ -147,39 +157,27 @@ service cloud.firestore {
     /**
      * @description Rules for policy scenario simulations.
      * @path /policyScenarios/{policyScenarioId}
-     * @allow (get) Anyone can read policy scenarios.
-     * @allow (list) Anyone can list policy scenarios.
-     * @deny (create) No one can create a policy scenario.
-     * @deny (update) No one can update a policy scenario.
-     * @deny (delete) No one can delete a policy scenario.
+     * @allow (get, list) Anyone can read policy scenarios.
+     * @deny (create, update, delete) No one can modify policy scenarios.
      * @principle Publicly accessible data with no write permissions.
      */
     match /policyScenarios/{policyScenarioId} {
-      allow get: if true;
-      allow list: if true;
-
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow get, list: if true;
+      allow write: if false;
     }
 
     /**
      * @description Rules for environmental education articles.
      * @path /articles/{articleId}
-     * @allow (get) Anyone can read articles.
-     * @allow (list) Anyone can list articles.
-     * @deny (create) No one can create a article.
-     * @deny (update) No one can update a article.
-     * @deny (delete) No one can delete a article.
+     * @allow (get, list) Anyone can read articles.
+     * @deny (create, update, delete) No one can modify articles.
      * @principle Publicly accessible data with no write permissions.
      */
     match /articles/{articleId} {
-      allow get: if true;
-      allow list: if true;
-
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow get, list: if true;
+      allow write: if false;
     }
   }
 }
+
+    
