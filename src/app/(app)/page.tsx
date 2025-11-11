@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -17,9 +19,22 @@ import {
   Store,
 } from 'lucide-react';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { doc } from 'firebase/firestore';
 
 export default function DashboardPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'dashboard-hero');
+  const { user } = useUser();
+  const firestore = useFirestore();
+
+  const userProfileRef = useMemoFirebase(() => {
+    if (!user || !firestore) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [user, firestore]);
+
+  const { data: userProfile } = useDoc(userProfileRef);
+
+  const ecoPoints = userProfile?.ecoPoints ?? 0;
 
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6 lg:p-8">
@@ -101,7 +116,7 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-grow flex flex-col items-center justify-center gap-1">
-                <p className="text-6xl font-bold">1,250</p>
+                <p className="text-6xl font-bold">{ecoPoints.toLocaleString()}</p>
                 <p className="text-primary-foreground/80">Points</p>
               </CardContent>
               <CardContent>

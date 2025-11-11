@@ -1,3 +1,4 @@
+'use client';
 
 import {
   Card,
@@ -9,35 +10,40 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Trophy, Gift, Coffee, Sprout } from 'lucide-react';
+import { useUser, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
+import { collection, doc } from 'firebase/firestore';
+import { useCollection } from '@/firebase/firestore/use-collection';
 
-const rewards = [
-  {
-    title: 'Free Coffee',
-    partner: 'The Daily Grind',
-    points: 500,
-    icon: Coffee,
-  },
-  {
-    title: '10% Off Groceries',
-    partner: 'Green Grocer',
-    points: 1000,
-    icon: Gift,
-  },
-  {
-    title: 'Plant a Tree',
-    partner: 'One Tree Planted',
-    points: 1500,
-    icon: Sprout,
-  },
-  {
-    title: '₹500 Donation',
-    partner: 'Local Charity',
-    points: 2000,
-    icon: Gift,
-  },
-];
+type Reward = {
+  title: string;
+  partner: string;
+  points: number;
+  icon: 'Coffee' | 'Gift' | 'Sprout';
+};
+
+const iconMap = {
+  Coffee,
+  Gift,
+  Sprout,
+};
 
 export default function RewardsPage() {
+  const { user } = useUser();
+  const firestore = useFirestore();
+
+  const userProfileRef = useMemoFirebase(() => {
+    if (!user || !firestore) return null;
+    return doc(firestore, 'users', user.uid);
+  }, [user, firestore]);
+  const { data: userProfile } = useDoc(userProfileRef);
+  const ecoPoints = userProfile?.ecoPoints ?? 0;
+
+  const rewardsCollectionRef = useMemoFirebase(() => {
+    if (!firestore) return null;
+    return collection(firestore, 'rewards');
+  }, [firestore]);
+  const { data: rewards, isLoading } = useCollection<Reward>(rewardsCollectionRef);
+
   return (
     <div className="container mx-auto max-w-4xl p-4 md:p-6 lg:p-8">
       <div className="space-y-8">
@@ -50,7 +56,7 @@ export default function RewardsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-6xl font-bold">1,250</p>
+              <p className="text-6xl font-bold">{ecoPoints.toLocaleString()}</p>
               <p className="text-lg">Keep up the great work!</p>
             </CardContent>
           </Card>
@@ -59,24 +65,27 @@ export default function RewardsPage() {
         <section>
           <h2 className="text-2xl font-bold font-headline mb-4">Redeem Your Points</h2>
           <div className="grid gap-6 md:grid-cols-2">
-            {rewards.map((reward, index) => (
+            {isLoading && <p>Loading rewards...</p>}
+            {rewards && rewards.map((reward, index) => {
+              const IconComponent = iconMap[reward.icon as keyof typeof iconMap] || Gift;
+              return (
               <Card key={index} className="flex flex-col">
                 <CardHeader className="flex flex-row items-center justify-between">
                   <div>
                     <CardTitle>{reward.title}</CardTitle>
                     <CardDescription>{reward.partner}</CardDescription>
                   </div>
-                  <reward.icon className="h-10 w-10 text-accent" />
+                  <IconComponent className="h-10 w-10 text-accent" />
                 </CardHeader>
                 <CardContent className="flex-grow"></CardContent>
                 <CardFooter className="flex justify-between items-center">
                   <div className="font-bold text-lg text-primary">
                     {reward.points.toLocaleString()} pts
                   </div>
-                  <Button disabled={1250 < reward.points}>Redeem</Button>
+                  <Button disabled={ecoPoints < reward.points}>Redeem</Button>
                 </CardFooter>
               </Card>
-            ))}
+            )})}
           </div>
         </section>
 
