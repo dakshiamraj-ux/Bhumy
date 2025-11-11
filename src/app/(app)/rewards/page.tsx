@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -29,7 +30,7 @@ const rewards = [
     icon: Sprout,
   },
   {
-    title: '$5 Donation',
+    title: '₹500 Donation',
     partner: 'Local Charity',
     points: 2000,
     icon: Gift,
