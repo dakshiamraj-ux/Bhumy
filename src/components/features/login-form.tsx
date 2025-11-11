@@ -46,6 +46,7 @@ export function LoginForm() {
      switch (error.code) {
         case 'auth/user-not-found':
         case 'auth/wrong-password':
+        case 'auth/invalid-credential':
             title = 'Invalid Credentials';
             description = 'The email or password you entered is incorrect.';
             break;
@@ -60,6 +61,10 @@ export function LoginForm() {
         case 'auth/popup-closed-by-user':
             title = 'Google Sign-In Canceled';
             description = 'You closed the Google Sign-In window before completing the process.';
+            break;
+        case 'auth/invalid-email':
+            title = 'Invalid Email';
+            description = 'Please enter a valid email address.';
             break;
         default:
             console.error('Firebase Auth Error:', error);
