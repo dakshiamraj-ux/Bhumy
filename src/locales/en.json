@@ -18,7 +18,8 @@
         "wasteToValueMarketplace": "Waste-to-Value Marketplace",
         "aiPolicyAdvisor": "AI Policy Advisor",
         "chatWithBhumy": "Chat with Bhumy",
-        "educationHub": "Education Hub"
+        "educationHub": "Education Hub",
+        "deviceHub": "Device Hub"
     },
     "page_titles": {
         "dashboard": "Dashboard",
@@ -28,6 +29,7 @@
         "marketplace": "Waste-to-Value Marketplace",
         "policyAdvisor": "AI Local Policy Advisor",
         "chat": "Chat with Bhumy",
-        "education": "Environmental Education Hub"
+        "education": "Environmental Education Hub",
+        "devices": "Device Hub"
     }
 }

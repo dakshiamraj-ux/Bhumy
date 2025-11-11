@@ -18,7 +18,8 @@
         "wasteToValueMarketplace": "अपशिष्ट-से-मूल्य बाज़ार",
         "aiPolicyAdvisor": "एआई नीति सलाहकार",
         "chatWithBhumy": "भूमि के साथ चैट करें",
-        "educationHub": "शिक्षा केंद्र"
+        "educationHub": "शिक्षा केंद्र",
+        "deviceHub": "डिवाइस हब"
     },
     "page_titles": {
         "dashboard": "डैशबोर्ड",
@@ -28,6 +29,7 @@
         "marketplace": "अपशिष्ट-से-मूल्य बाज़ार",
         "policyAdvisor": "एआई स्थानीय नीति सलाहकार",
         "chat": "भूमि के साथ चैट करें",
-        "education": "पर्यावरण शिक्षा केंद्र"
+        "education": "पर्यावरण शिक्षा केंद्र",
+        "devices": "डिवाइस हब"
     }
 }

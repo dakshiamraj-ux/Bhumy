@@ -8,6 +8,7 @@ import {
   Store,
   Trophy,
   type LucideIcon,
+  HardDrive,
 } from 'lucide-react';
 
 type NavLink = {
@@ -49,6 +50,12 @@ export const NAV_LINKS: NavLink[] = [
     tooltipKey: 'nav.wasteToValueMarketplace',
   },
   {
+    href: '/devices',
+    labelKey: 'nav.deviceHub',
+    icon: HardDrive,
+    tooltipKey: 'nav.deviceHub',
+  },
+  {
     href: '/policy-advisor',
     labelKey: 'nav.policyAdvisor',
     icon: Lightbulb,
@@ -79,6 +86,7 @@ export const PAGE_TITLES: { [key: string]: PageTitle } = {
   footprint: { href: '/footprint', titleKey: 'page_titles.footprint' },
   rewards: { href: '/rewards', titleKey: 'page_titles.rewards' },
   marketplace: { href: '/marketplace', titleKey: 'page_titles.marketplace' },
+  devices: { href: '/devices', titleKey: 'page_titles.devices' },
   policyAdvisor: { href: '/policy-advisor', titleKey: 'page_titles.policyAdvisor' },
   chat: { href: '/chat', titleKey: 'page_titles.chat' },
   education: { href: '/education', titleKey: 'page_titles.education' },
