@@ -39,21 +39,21 @@ const newsItems = [
         title: 'How we’re using AI to help build a circular economy',
         source: 'Google Blog',
         snippet: 'Learn how AI is helping to design out waste and pollution, keep products and materials in use, and regenerate natural systems.',
-        url: 'https://blog.google/outreach-initiatives/sustainability/circular-economy-ai/',
+        url: 'https://blog.google/outreach-initiatives/sustainability/google-circular-economy-ai/',
         imageId: 'education-news-1',
     },
     {
         title: 'New ways we’re helping you live more sustainably',
         source: 'The Keyword',
         snippet: 'Discover new features in Google products that make it easier to find sustainable options, from travel to shopping.',
-        url: 'https://blog.google/products/search/new-ways-were-helping-you-live-more-sustainably/',
+        url: 'https://blog.google/products/search/new-ways-were-helping-you-live-more-sustainably-2022/',
         imageId: 'education-news-2',
     },
     {
-        title: 'A new, more comprehensive view of our climate action',
+        title: 'Our new Environmental Report is here',
         source: 'Google Sustainability',
         snippet: 'Explore Google\'s latest environmental report for a deeper look at their progress toward a carbon-free future.',
-        url: 'https://sustainability.google/reports/environmental-report-2023/',
+        url: 'https://sustainability.google/reports/environmental-report/',
         imageId: 'education-news-3',
     }
 ];
