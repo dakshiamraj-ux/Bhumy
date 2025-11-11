@@ -129,7 +129,7 @@ service cloud.firestore {
       allow get, list: if isOwner(userId);
 
       allow create: if isOwner(userId) && request.resource.data.userId == userId;
-      allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+      allow update: if isExistingOwner(userId) && request.resource-data.userId == resource.data.userId;
       allow delete: if isExistingOwner(userId);
     }
 
@@ -156,14 +156,13 @@ service cloud.firestore {
 
     /**
      * @description Rules for policy scenario simulations.
-     * @path /policyScenarios/{policyScenarioId}
-     * @allow (get, list) Anyone can read policy scenarios.
-     * @deny (create, update, delete) No one can modify policy scenarios.
-     * @principle Publicly accessible data with no write permissions.
+     * @path /users/{userId}/policyScenarios/{policyScenarioId}
+     * @allow (get, list, create) User can manage their own policy scenarios.
+     * @principle Enforces user ownership for simulation history.
      */
-    match /policyScenarios/{policyScenarioId} {
-      allow get, list: if true;
-      allow write: if false;
+    match /users/{userId}/policyScenarios/{policyScenarioId} {
+      allow get, list, create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
     }
 
     /**
@@ -179,5 +178,3 @@ service cloud.firestore {
     }
   }
 }
-
-    

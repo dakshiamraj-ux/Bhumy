@@ -211,40 +211,70 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "PolicyScenario",
       "type": "object",
-      "description": "Represents a policy scenario created using the AI Local Policy Advisor.",
+      "description": "Represents a policy scenario simulation from the AI Local Policy Advisor.",
       "properties": {
         "id": {
           "type": "string",
           "description": "Unique identifier for the PolicyScenario entity."
         },
-        "name": {
+        "userId": {
           "type": "string",
-          "description": "Name of the policy scenario."
+          "description": "ID of the user who ran the simulation."
         },
-        "description": {
+        "location": {
           "type": "string",
-          "description": "Description of the policy scenario."
+          "description": "The location for which the policy was simulated."
         },
-        "parameters": {
+        "policyDescription": {
           "type": "string",
-          "description": "JSON string containing the parameters of the policy scenario."
-        },
-        "environmentalImpact": {
-          "type": "number",
-          "description": "Simulated environmental impact of the policy scenario."
+          "description": "The user-provided description of the policy."
         },
         "simulationDate": {
           "type": "string",
-          "description": "Date and time of the policy scenario simulation.",
-          "format": "date-time"
+          "format": "date-time",
+          "description": "Date and time of the simulation."
+        },
+        "environmentalImpact": {
+          "type": "object",
+          "description": "Simulated environmental impact metrics.",
+          "properties": {
+            "metric": { "type": "string", "description": "e.g., 'CO2 Emissions Reduced'" },
+            "value": { "type": "string", "description": "e.g., '15,000 tonnes/year'" },
+            "impact": { "type": "string", "enum": ["positive", "negative"], "description": "Direction of the impact."}
+          }
+        },
+        "alternativePolicies": {
+          "type": "array",
+          "description": "AI-suggested alternative or complementary policies.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "actionPlan": {
+          "type": "array",
+          "description": "A step-by-step action plan for implementation.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": { "type": "number" },
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "timeline": { "type": "string" },
+              "estimatedCost": { "type": "string" },
+              "expectedBenefit": { "type": "string" }
+            }
+          }
         }
       },
       "required": [
         "id",
-        "name",
-        "description",
-        "parameters",
-        "environmentalImpact",
+        "userId",
+        "location",
+        "policyDescription",
         "simulationDate"
       ]
     },
@@ -465,14 +495,18 @@
         }
       },
       {
-        "path": "/policyScenarios/{policyScenarioId}",
+        "path": "/users/{userId}/policyScenarios/{policyScenarioId}",
         "definition": {
           "entityName": "PolicyScenario",
           "schema": {
             "$ref": "#/backend/entities/PolicyScenario"
           },
-          "description": "Stores policy scenario simulations.",
+          "description": "Stores policy scenario simulations created by a user.",
           "params": [
+             {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            },
             {
               "name": "policyScenarioId",
               "description": "The unique identifier of the policy scenario."
@@ -500,5 +534,3 @@
     "reasoning": "The Firestore data structure is designed to ensure security, scalability, and debuggability, adhering to the principles of Authorization Independence and Structural Segregation. User profiles and their associated data (waste scans, listings, redemptions, devices) are stored under their respective user IDs to maintain clear ownership. Publicly accessible data, such as rewards and articles, are stored in separate collections. This structure allows for simple and robust security rules.\n\nSpecifically, authorization independence is achieved by avoiding `get()` calls in security rules. The structure will leverage path-based ownership and appropriate denormalization if collaboration features are to be added in the future, such as the waste-to-value marketplace. For instance, the 'listings' collection, while owned by a user, could, in the future, require denormalizing user-specific roles or permissions within each document to handle collaborative access without relying on `get()` calls. Currently, only the user owning the listing has access, and this information is encoded via the path.\n\nQAPs (Rules are not Filters) are supported using segregation and path-based ownership. Private user data is segregated under `/users/{userId}`, enabling simple rules based on `request.auth.uid == userId`. Publicly accessible data such as `/articles` and `/rewards` can have list access rules that do not inadvertently expose other data. Denormalization of group membership data would also support QAPs if a collaborative feature, such as allowing multiple users to manage a single listing, were to be implemented."
   }
 }
-
-    
