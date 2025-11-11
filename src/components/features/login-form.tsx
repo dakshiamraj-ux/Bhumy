@@ -66,6 +66,11 @@ export function LoginForm() {
             title = 'Invalid Email';
             description = 'Please enter a valid email address.';
             break;
+        case 'auth/operation-not-allowed':
+            title = 'Sign-in Method Disabled';
+            description =
+                'This sign-in method is not enabled. Please enable it in your Firebase console under Authentication > Sign-in method.';
+            break;
         default:
             console.error('Firebase Auth Error:', error);
             break;
