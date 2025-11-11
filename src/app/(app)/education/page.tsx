@@ -9,7 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpen, Newspaper, Bot, Users } from 'lucide-react';
+import { BhumyChat } from '@/components/features/bhumy-chat';
+import { CommunityChallenges } from '@/components/features/community-challenges';
+import { LocalStats } from '@/components/features/local-stats';
 
 const faqItems = [
   {
@@ -64,48 +67,51 @@ export default function EducationPage() {
   const compostingImg = PlaceHolderImages.find(p => p.id === 'education-composting');
   
   return (
-    <div className="container mx-auto max-w-4xl p-4 md:p-6 lg:p-8">
+    <div className="container mx-auto p-4 md:p-6 lg:p-8">
       <div className="space-y-12">
         <section className="text-center">
-          <h1 className="text-3xl font-bold font-headline">Knowledge Hub</h1>
+          <h1 className="text-4xl font-bold font-headline">Education Hub</h1>
           <p className="mt-2 text-lg text-muted-foreground">
-            Learn more about waste management and sustainable living.
+            Your gateway to sustainable knowledge and community action.
           </p>
         </section>
 
+        <LocalStats />
+
         <section>
+          <h2 className="text-2xl font-bold font-headline mb-4 flex items-center gap-2"><BookOpen/> Learn</h2>
           <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardHeader className="p-0">
                  {recyclingImg && (
                   <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
                     <Image src={recyclingImg.imageUrl} alt={recyclingImg.description} fill className="object-cover" data-ai-hint={recyclingImg.imageHint}/>
                   </div>
                  )}
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4">
                 <h3 className="text-xl font-semibold">The World of Recycling</h3>
-                <p className="mt-2 text-muted-foreground">Discover what happens to your recyclables after they leave the curb and how you can recycle more effectively.</p>
+                <p className="mt-2 text-muted-foreground">Discover what happens to your recyclables and how to recycle effectively.</p>
               </CardContent>
             </Card>
-            <Card>
-              <CardHeader>
+            <Card className="hover:shadow-md transition-shadow">
+              <CardHeader className="p-0">
                 {compostingImg && (
                   <div className="relative aspect-video w-full overflow-hidden rounded-t-lg">
                     <Image src={compostingImg.imageUrl} alt={compostingImg.description} fill className="object-cover" data-ai-hint={compostingImg.imageHint}/>
                   </div>
                 )}
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-4">
                 <h3 className="text-xl font-semibold">Composting 101</h3>
-                <p className="mt-2 text-muted-foreground">Turn your food scraps into "black gold" for your garden. Learn the basics of home composting.</p>
+                <p className="mt-2 text-muted-foreground">Turn your food scraps into "black gold" for your garden.</p>
               </CardContent>
             </Card>
           </div>
         </section>
         
         <section>
-            <h2 className="text-2xl font-bold font-headline mb-4 text-center">Recent News from Google</h2>
+            <h2 className="text-2xl font-bold font-headline mb-4 flex items-center gap-2"><Newspaper/> Recent News</h2>
             <div className="grid gap-6 md:grid-cols-1">
                 {newsItems.map((item, index) => {
                     const image = PlaceHolderImages.find(p => p.id === item.imageId);
@@ -136,6 +142,15 @@ export default function EducationPage() {
                 })}
             </div>
         </section>
+
+        <section>
+             <h2 className="text-2xl font-bold font-headline mb-4 flex items-center gap-2"><Bot/> AI Research Assistant</h2>
+             <div className="h-[400px] md:h-[500px] p-0 md:p-0 lg:p-0">
+                <BhumyChat />
+            </div>
+        </section>
+
+        <CommunityChallenges />
 
         <section>
           <Card>
