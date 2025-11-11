@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google';
 import { FirebaseClientProvider } from '@/firebase';
 import { AuthStateGate } from '@/components/auth/AuthStateGate';
+import { LanguageProvider } from '@/context/language-provider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -20,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans`}>
-        <FirebaseClientProvider>
-          <AuthStateGate>{children}</AuthStateGate>
-        </FirebaseClientProvider>
+        <LanguageProvider>
+          <FirebaseClientProvider>
+            <AuthStateGate>{children}</AuthStateGate>
+          </FirebaseClientProvider>
+        </LanguageProvider>
         <Toaster />
       </body>
     </html>

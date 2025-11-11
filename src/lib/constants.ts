@@ -12,69 +12,74 @@ import {
 
 type NavLink = {
   href: string;
-  label: string;
+  labelKey: string;
   icon: LucideIcon;
-  tooltip: string;
+  tooltipKey: string;
 };
 
 export const NAV_LINKS: NavLink[] = [
   {
     href: '/',
-    label: 'Dashboard',
+    labelKey: 'nav.dashboard',
     icon: LayoutDashboard,
-    tooltip: 'Dashboard',
+    tooltipKey: 'nav.dashboard',
   },
   {
     href: '/scanner',
-    label: 'Waste Scanner',
+    labelKey: 'nav.wasteScanner',
     icon: ScanLine,
-    tooltip: 'Waste Scanner',
+    tooltipKey: 'nav.wasteScanner',
   },
   {
     href: '/footprint',
-    label: 'Footprint',
+    labelKey: 'nav.footprint',
     icon: BarChart3,
-    tooltip: 'Waste Footprint',
+    tooltipKey: 'nav.wasteFootprint',
   },
   {
     href: '/rewards',
-    label: 'Rewards',
+    labelKey: 'nav.rewards',
     icon: Trophy,
-    tooltip: 'Community Rewards',
+    tooltipKey: 'nav.communityRewards',
   },
   {
     href: '/marketplace',
-    label: 'Marketplace',
+    labelKey: 'nav.marketplace',
     icon: Store,
-    tooltip: 'Waste-to-Value Marketplace',
+    tooltipKey: 'nav.wasteToValueMarketplace',
   },
   {
     href: '/policy-advisor',
-    label: 'Policy Advisor',
+    labelKey: 'nav.policyAdvisor',
     icon: Lightbulb,
-    tooltip: 'AI Policy Advisor',
+    tooltipKey: 'nav.aiPolicyAdvisor',
   },
   {
     href: '/chat',
-    label: 'Bhumy Chat',
+    labelKey: 'nav.bhumyChat',
     icon: Mic,
-    tooltip: 'Chat with Bhumy',
+    tooltipKey: 'nav.chatWithBhumy',
   },
   {
     href: '/education',
-    label: 'Learn',
+    labelKey: 'nav.learn',
     icon: BookOpen,
-    tooltip: 'Education Hub',
+    tooltipKey: 'nav.educationHub',
   },
 ];
 
-export const PAGE_TITLES: { [key: string]: string } = {
-  '/': 'Dashboard',
-  '/scanner': 'Smart Waste Scanner',
-  '/footprint': 'Waste Footprint Tracker',
-  '/rewards': 'Community Rewards',
-  '/marketplace': 'Waste-to-Value Marketplace',
-  '/policy-advisor': 'AI Local Policy Advisor',
-  '/chat': 'Chat with Bhumy',
-  '/education': 'Environmental Education Hub',
+type PageTitle = {
+  href: string;
+  titleKey: string;
+}
+
+export const PAGE_TITLES: { [key: string]: PageTitle } = {
+  dashboard: { href: '/', titleKey: 'page_titles.dashboard' },
+  scanner: { href: '/scanner', titleKey: 'page_titles.scanner' },
+  footprint: { href: '/footprint', titleKey: 'page_titles.footprint' },
+  rewards: { href: '/rewards', titleKey: 'page_titles.rewards' },
+  marketplace: { href: '/marketplace', titleKey: 'page_titles.marketplace' },
+  policyAdvisor: { href: '/policy-advisor', titleKey: 'page_titles.policyAdvisor' },
+  chat: { href: '/chat', titleKey: 'page_titles.chat' },
+  education: { href: '/education', titleKey: 'page_titles.education' },
 };

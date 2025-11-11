@@ -1,0 +1,33 @@
+
+{
+    "app": {
+        "name": "Bhumy",
+        "tagline": "Smart Waste, Clean Earth."
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "wasteScanner": "Waste Scanner",
+        "footprint": "Footprint",
+        "rewards": "Rewards",
+        "marketplace": "Marketplace",
+        "policyAdvisor": "Policy Advisor",
+        "bhumyChat": "Bhumy Chat",
+        "learn": "Learn",
+        "wasteFootprint": "Waste Footprint",
+        "communityRewards": "Community Rewards",
+        "wasteToValueMarketplace": "Waste-to-Value Marketplace",
+        "aiPolicyAdvisor": "AI Policy Advisor",
+        "chatWithBhumy": "Chat with Bhumy",
+        "educationHub": "Education Hub"
+    },
+    "page_titles": {
+        "dashboard": "Dashboard",
+        "scanner": "Smart Waste Scanner",
+        "footprint": "Waste Footprint Tracker",
+        "rewards": "Community Rewards",
+        "marketplace": "Waste-to-Value Marketplace",
+        "policyAdvisor": "AI Local Policy Advisor",
+        "chat": "Chat with Bhumy",
+        "education": "Environmental Education Hub"
+    }
+}

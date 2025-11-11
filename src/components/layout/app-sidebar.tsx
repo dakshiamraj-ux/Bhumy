@@ -16,10 +16,12 @@ import { NAV_LINKS } from '@/lib/constants';
 import { Separator } from '../ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useLanguage } from '@/context/language-provider';
 
 export function AppSidebar() {
   const pathname = usePathname();
   const userAvatar = PlaceHolderImages.find(p => p.id === 'user-avatar');
+  const { t } = useLanguage();
 
   return (
     <Sidebar>
@@ -28,7 +30,7 @@ export function AppSidebar() {
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Leaf className="h-6 w-6" />
           </div>
-          <span className="text-lg font-semibold">Bhumy</span>
+          <span className="text-lg font-semibold">{t('app.name')}</span>
         </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
@@ -38,11 +40,11 @@ export function AppSidebar() {
               <SidebarMenuButton
                 asChild
                 isActive={pathname === link.href}
-                tooltip={{ children: link.tooltip, side: 'right' }}
+                tooltip={{ children: t(link.tooltipKey), side: 'right' }}
               >
                 <Link href={link.href}>
                   <link.icon />
-                  <span>{link.label}</span>
+                  <span>{t(link.labelKey)}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

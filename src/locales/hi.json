@@ -1,0 +1,33 @@
+
+{
+    "app": {
+        "name": "भूमि",
+        "tagline": "स्मार्ट कचरा, स्वच्छ पृथ्वी।"
+    },
+    "nav": {
+        "dashboard": "डैशबोर्ड",
+        "wasteScanner": "कचरा स्कैनर",
+        "footprint": "फुटप्रिंट",
+        "rewards": "पुरस्कार",
+        "marketplace": "बाजार",
+        "policyAdvisor": "नीति सलाहकार",
+        "bhumyChat": "भूमि चैट",
+        "learn": "जानें",
+        "wasteFootprint": "अपशिष्ट पदचिह्न",
+        "communityRewards": "सामुदायिक पुरस्कार",
+        "wasteToValueMarketplace": "अपशिष्ट-से-मूल्य बाज़ार",
+        "aiPolicyAdvisor": "एआई नीति सलाहकार",
+        "chatWithBhumy": "भूमि के साथ चैट करें",
+        "educationHub": "शिक्षा केंद्र"
+    },
+    "page_titles": {
+        "dashboard": "डैशबोर्ड",
+        "scanner": "स्मार्ट कचरा स्कैनर",
+        "footprint": "अपशिष्ट पदचिह्न ट्रैकर",
+        "rewards": "सामुदायिक पुरस्कार",
+        "marketplace": "अपशिष्ट-से-मूल्य बाज़ार",
+        "policyAdvisor": "एआई स्थानीय नीति सलाहकार",
+        "chat": "भूमि के साथ चैट करें",
+        "education": "पर्यावरण शिक्षा केंद्र"
+    }
+}
