@@ -189,7 +189,8 @@ service cloud.firestore {
         allow get, list: if isSignedIn();
 
         allow create: if isSignedIn() 
-                      && request.resource.data.userId == request.auth.uid;
+                      && request.resource.data.userId == request.auth.uid
+                      && request.resource.data.condition in ['Clean', 'Full', 'Overflowing', 'Damaged'];
         allow update: if isExistingOwner(request.resource.data.userId) 
                       && request.resource.data.userId == resource.data.userId;
         allow delete: if isExistingOwner(resource.data.userId);
@@ -215,5 +216,3 @@ service cloud.firestore {
 
   }
 }
-
-    

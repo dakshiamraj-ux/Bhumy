@@ -384,11 +384,12 @@
         "userAvatarUrl": { "type": "string", "format": "uri", "description": "URL to the user's avatar." },
         "content": { "type": "string", "description": "The text content of the post." },
         "imageUrl": { "type": "string", "format": "uri", "description": "Optional image URL for the post." },
+        "condition": { "type": "string", "enum": ["Clean", "Full", "Overflowing", "Damaged"], "description": "The reported condition of the waste bin."},
         "taggedNagarpalika": { "type": "boolean", "description": "Indicates if the municipality is tagged." },
         "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of when the post was created." },
         "likes": { "type": "number", "description": "Number of likes on the post." }
       },
-      "required": ["id", "userId", "username", "content", "createdAt"]
+      "required": ["id", "userId", "username", "content", "condition", "createdAt"]
     },
     "Comment": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -599,5 +600,3 @@
     "reasoning": "The Firestore data structure is designed to ensure security, scalability, and debuggability, adhering to the principles of Authorization Independence and Structural Segregation. User profiles and their associated data (waste scans, listings, redemptions, devices) are stored under their respective user IDs to maintain clear ownership. Publicly accessible data, such as rewards, articles and posts, are stored in separate collections. This structure allows for simple and robust security rules.\n\nSpecifically, authorization independence is achieved by avoiding `get()` calls in security rules. The structure will leverage path-based ownership and appropriate denormalization if collaboration features are to be added in the future, such as the waste-to-value marketplace. For instance, the 'listings' collection, while owned by a user, could, in the future, require denormalizing user-specific roles or permissions within each document to handle collaborative access without relying on `get()` calls. Currently, only the user owning the listing has access, and this information is encoded via the path.\n\nQAPs (Rules are not Filters) are supported using segregation and path-based ownership. Private user data is segregated under `/users/{userId}`, enabling simple rules based on `request.auth.uid == userId`. Publicly accessible data such as `/articles` and `/rewards` can have list access rules that do not inadvertently expose other data. Denormalization of group membership data would also support QAPs if a collaborative feature, such as allowing multiple users to manage a single listing, were to be implemented."
   }
 }
-
-    

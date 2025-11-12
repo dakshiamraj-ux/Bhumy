@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -19,7 +18,19 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Heart, MessageCircle, Send, Loader2, Rss, AlertCircle } from 'lucide-react';
+import {
+  Heart,
+  MessageCircle,
+  Send,
+  Loader2,
+  Rss,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  Info,
+  Wrench,
+  Plus,
+} from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { WithId } from '@/firebase/firestore/use-collection';
 import { useForm } from 'react-hook-form';
@@ -31,6 +42,7 @@ import {
   FormField,
   FormItem,
   FormMessage,
+  FormLabel,
 } from '@/components/ui/form';
 import { Input } from '../ui/input';
 import { useState } from 'react';
@@ -38,6 +50,22 @@ import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import Image from 'next/image';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription
+} from '@/components/ui/dialog';
+
 
 // Corresponds to Post and Comment entities in backend.json
 type Post = {
@@ -49,6 +77,7 @@ type Post = {
   taggedNagarpalika: boolean;
   createdAt: Timestamp;
   likes: number;
+  condition: 'Clean' | 'Full' | 'Overflowing' | 'Damaged';
 };
 
 type Comment = {
@@ -64,25 +93,38 @@ const createPostSchema = z.object({
     .string()
     .min(1, 'Post cannot be empty.')
     .max(500, 'Post cannot exceed 500 characters.'),
+  condition: z.enum(['Clean', 'Full', 'Overflowing', 'Damaged'], {
+    required_error: 'You must select a condition.',
+  }),
   taggedNagarpalika: z.boolean().default(false),
 });
 
-type CreatePostForm = z.infer<typeof createPostSchema>;
+type CreatePostFormValues = z.infer<typeof createPostSchema>;
 
-function CreatePost() {
+const conditionOptions = {
+    Clean: { icon: CheckCircle, color: 'text-green-600', label: 'Clean' },
+    Full: { icon: Info, color: 'text-yellow-600', label: 'Full' },
+    Overflowing: { icon: XCircle, color: 'text-red-600', label: 'Overflowing' },
+    Damaged: { icon: Wrench, color: 'text-orange-600', label: 'Damaged' },
+};
+
+
+function CreatePostDialog() {
   const { user } = useUser();
   const firestore = useFirestore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const form = useForm<CreatePostForm>({
+  const form = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
       content: '',
+      condition: undefined,
       taggedNagarpalika: false,
     },
   });
 
-  const onSubmit = async (values: CreatePostForm) => {
+  const onSubmit = async (values: CreatePostFormValues) => {
     if (!firestore || !user) return;
     setIsSubmitting(true);
 
@@ -93,6 +135,7 @@ function CreatePost() {
       content: values.content,
       taggedNagarpalika: values.taggedNagarpalika,
       likes: 0,
+      condition: values.condition,
       // No imageUrl for now
     };
 
@@ -104,69 +147,102 @@ function CreatePost() {
     
     form.reset();
     setIsSubmitting(false);
+    setOpen(false);
   };
 
   return (
-    <Card>
-      <CardContent className="p-4">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className="fixed bottom-24 right-6 h-16 w-16 rounded-full shadow-lg z-20 md:bottom-8 md:right-8">
+            <Plus className="h-8 w-8" />
+            <span className="sr-only">Report Waste</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Report Waste in Your Area</DialogTitle>
+          <DialogDescription>
+            Help your community by reporting the status of local waste bins.
+          </DialogDescription>
+        </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex items-start gap-4">
-              <Avatar className="h-10 w-10 border">
-                <AvatarImage src={user?.photoURL ?? undefined} />
-                <AvatarFallback>
-                  {user?.displayName?.[0] ?? user?.email?.[0] ?? 'U'}
-                </AvatarFallback>
-              </Avatar>
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem className="flex-grow">
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Caption</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="e.g., The bin near the park entrance is overflowing..."
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="condition"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Condition</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <Textarea
-                        placeholder="What's happening in your neighborhood?"
-                        className="resize-none"
-                        {...field}
-                      />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select the bin's condition" />
+                      </SelectTrigger>
                     </FormControl>
+                    <SelectContent>
+                      {Object.entries(conditionOptions).map(([key, {icon: Icon, color, label}]) => (
+                        <SelectItem key={key} value={key}>
+                            <div className="flex items-center gap-2">
+                                <Icon className={`h-4 w-4 ${color}`} />
+                                <span>{label}</span>
+                            </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="taggedNagarpalika"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Tag Municipal Authority</FormLabel>
                     <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <FormField
-                control={form.control}
-                name="taggedNagarpalika"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <Label htmlFor="taggedNagarpalika" className="flex items-center gap-2 cursor-pointer">
-                        <AlertCircle className="h-4 w-4 text-yellow-600" />
-                        Tag Nagarpalika (for issues)
-                      </Label>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Post
-              </Button>
-            </div>
+                  </div>
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            
+            <Button type="submit" disabled={isSubmitting} className="w-full">
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Post Report
+            </Button>
           </form>
         </Form>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }
+
 
 function CommentSection({ postId }: { postId: string }) {
   const firestore = useFirestore();
@@ -240,27 +316,14 @@ function CommentSection({ postId }: { postId: string }) {
 
 function PostCard({ post }: { post: WithId<Post> }) {
   const [showComments, setShowComments] = useState(false);
+  const ConditionIcon = conditionOptions[post.condition]?.icon || Info;
+  const conditionColor = conditionOptions[post.condition]?.color || 'text-gray-500';
+
   return (
     <Card>
-      <CardContent className="p-4">
-        <div className="flex items-start gap-4">
-          <Avatar className="h-11 w-11 border">
-            <AvatarImage src={post.userAvatarUrl} />
-            <AvatarFallback>{post.username[0]}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <div className="flex items-center justify-between">
-              <p className="font-semibold">{post.username}</p>
-              <p className="text-xs text-muted-foreground">
-                {post.createdAt &&
-                  formatDistanceToNow(post.createdAt.toDate(), {
-                    addSuffix: true,
-                  })}
-              </p>
-            </div>
-            <p className="mt-1">{post.content}</p>
-            {post.imageUrl && (
-              <div className="relative mt-3 aspect-video w-full overflow-hidden rounded-lg border">
+      <CardContent className="p-0">
+         {post.imageUrl && (
+              <div className="relative mt-3 aspect-video w-full overflow-hidden rounded-t-lg border-b">
                 <Image
                   src={post.imageUrl}
                   alt="Post image"
@@ -269,15 +332,37 @@ function PostCard({ post }: { post: WithId<Post> }) {
                 />
               </div>
             )}
+        <div className="p-4">
+            <div className="flex items-start gap-4">
+              <Avatar className="h-11 w-11 border">
+                <AvatarImage src={post.userAvatarUrl} />
+                <AvatarFallback>{post.username[0]}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <p className="font-semibold">{post.username}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {post.createdAt &&
+                      formatDistanceToNow(post.createdAt.toDate(), {
+                        addSuffix: true,
+                      })}
+                  </p>
+                </div>
+                <div className={`flex items-center gap-1.5 text-sm font-medium ${conditionColor}`}>
+                    <ConditionIcon className="h-4 w-4"/>
+                    <span>{post.condition}</span>
+                </div>
+              </div>
+            </div>
+            <p className="mt-3">{post.content}</p>
             {post.taggedNagarpalika && (
                 <div className="mt-3 flex items-center gap-2 text-sm text-yellow-700 dark:text-yellow-500 font-medium p-2 rounded-md bg-yellow-500/10 border border-yellow-500/20">
                     <AlertCircle className="h-4 w-4" />
-                    Nagarpalika Tagged
+                    Municipal Authority Tagged
                 </div>
             )}
-          </div>
         </div>
-        <div className="mt-4 flex items-center justify-between border-t pt-2">
+        <div className="flex items-center justify-between border-t px-2">
           <Button variant="ghost" size="sm" className="flex items-center gap-2">
             <Heart className="h-4 w-4" /> {post.likes}
           </Button>
@@ -293,7 +378,11 @@ function PostCard({ post }: { post: WithId<Post> }) {
             <Send className="h-4 w-4" /> Share
           </Button>
         </div>
-        {showComments && <CommentSection postId={post.id} />}
+        {showComments && 
+            <div className="p-4 border-t">
+                <CommentSection postId={post.id} />
+            </div>
+        }
       </CardContent>
     </Card>
   );
@@ -331,7 +420,7 @@ export function BhumyMediaFeed() {
         <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 text-center text-muted-foreground">
             <Rss className="mb-2 h-10 w-10"/>
             <p className="font-bold">The feed is quiet...</p>
-            <p className="text-sm">Be the first to share an update!</p>
+            <p className="text-sm">Be the first to report a waste issue!</p>
         </div>
       );
     }
@@ -345,11 +434,9 @@ export function BhumyMediaFeed() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <CreatePost />
+    <div className="mx-auto max-w-2xl space-y-6 pb-24">
       {renderContent()}
+      <CreatePostDialog />
     </div>
   );
 }
-
-    
