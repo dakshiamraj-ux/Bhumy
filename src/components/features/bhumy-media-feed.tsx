@@ -30,6 +30,8 @@ import {
   Info,
   Wrench,
   Plus,
+  Image as ImageIcon,
+  X,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { WithId } from '@/firebase/firestore/use-collection';
@@ -45,7 +47,7 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { Input } from '../ui/input';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { addDocumentNonBlocking } from '@/firebase/non-blocking-updates';
 import Image from 'next/image';
 import { Checkbox } from '../ui/checkbox';
@@ -88,6 +90,9 @@ type Comment = {
   createdAt: Timestamp;
 };
 
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
 const createPostSchema = z.object({
   content: z
     .string()
@@ -97,6 +102,13 @@ const createPostSchema = z.object({
     required_error: 'You must select a condition.',
   }),
   taggedNagarpalika: z.boolean().default(false),
+  image: z
+    .any()
+    .refine((file) => !file || file.size <= MAX_FILE_SIZE, `Max image size is 4MB.`)
+    .refine(
+      (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported."
+    ).optional(),
 });
 
 type CreatePostFormValues = z.infer<typeof createPostSchema>;
@@ -114,6 +126,9 @@ function CreatePostDialog() {
   const firestore = useFirestore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [open, setOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   const form = useForm<CreatePostFormValues>({
     resolver: zodResolver(createPostSchema),
@@ -124,11 +139,32 @@ function CreatePostDialog() {
     },
   });
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      form.setValue('image', file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  const resetForm = () => {
+    form.reset();
+    setImagePreview(null);
+    if(fileInputRef.current) {
+        fileInputRef.current.value = '';
+    }
+  }
+
+
   const onSubmit = async (values: CreatePostFormValues) => {
     if (!firestore || !user) return;
     setIsSubmitting(true);
 
-    const newPost: Omit<Post, 'createdAt'> = {
+    const newPost: Omit<Post, 'createdAt'> & {imageUrl?: string} = {
       userId: user.uid,
       username: user.displayName || user.email || 'Anonymous',
       userAvatarUrl: user.photoURL || '',
@@ -136,8 +172,12 @@ function CreatePostDialog() {
       taggedNagarpalika: values.taggedNagarpalika,
       likes: 0,
       condition: values.condition,
-      // No imageUrl for now
     };
+    
+    if (imagePreview) {
+        newPost.imageUrl = imagePreview;
+    }
+
 
     const postsCollection = collection(firestore, 'posts');
     await addDocumentNonBlocking(postsCollection, {
@@ -145,13 +185,18 @@ function CreatePostDialog() {
       createdAt: serverTimestamp(),
     });
     
-    form.reset();
+    resetForm();
     setIsSubmitting(false);
     setOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) {
+            resetForm();
+        }
+    }}>
       <DialogTrigger asChild>
         <Button className="fixed bottom-24 right-6 h-16 w-16 rounded-full shadow-lg z-20 md:bottom-8 md:right-8">
             <Plus className="h-8 w-8" />
@@ -181,6 +226,52 @@ function CreatePostDialog() {
                     />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                   <FormLabel>Photo</FormLabel>
+                   <FormControl>
+                        <div 
+                            className="relative flex justify-center items-center h-48 w-full border-2 border-dashed rounded-lg cursor-pointer hover:border-primary"
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleImageChange}
+                                className="hidden"
+                                accept="image/*"
+                            />
+                            {imagePreview ? (
+                                <>
+                                    <Image src={imagePreview} alt="Preview" fill className="object-cover rounded-md" />
+                                     <Button 
+                                        variant="destructive" size="icon" className="absolute top-2 right-2 h-6 w-6 z-10"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setImagePreview(null);
+                                            form.setValue('image', null);
+                                            if(fileInputRef.current) fileInputRef.current.value = '';
+                                        }}
+                                        >
+                                            <X className="h-4 w-4"/>
+                                    </Button>
+                                </>
+                            ) : (
+                                <div className="text-center text-muted-foreground">
+                                    <ImageIcon className="mx-auto h-8 w-8" />
+                                    <p className="text-sm mt-2">Click to upload a photo</p>
+                                </div>
+                            )}
+                        </div>
+                   </FormControl>
+                   <FormMessage />
                 </FormItem>
               )}
             />
@@ -322,16 +413,6 @@ function PostCard({ post }: { post: WithId<Post> }) {
   return (
     <Card>
       <CardContent className="p-0">
-         {post.imageUrl && (
-              <div className="relative mt-3 aspect-video w-full overflow-hidden rounded-t-lg border-b">
-                <Image
-                  src={post.imageUrl}
-                  alt="Post image"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
         <div className="p-4">
             <div className="flex items-start gap-4">
               <Avatar className="h-11 w-11 border">
@@ -362,6 +443,16 @@ function PostCard({ post }: { post: WithId<Post> }) {
                 </div>
             )}
         </div>
+        {post.imageUrl && (
+              <div className="relative mt-0 aspect-square w-full overflow-hidden border-y">
+                <Image
+                  src={post.imageUrl}
+                  alt="Post image"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+        )}
         <div className="flex items-center justify-between border-t px-2">
           <Button variant="ghost" size="sm" className="flex items-center gap-2">
             <Heart className="h-4 w-4" /> {post.likes}

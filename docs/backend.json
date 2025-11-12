@@ -383,7 +383,7 @@
         "username": { "type": "string", "description": "Username of the user who created the post." },
         "userAvatarUrl": { "type": "string", "format": "uri", "description": "URL to the user's avatar." },
         "content": { "type": "string", "description": "The text content of the post." },
-        "imageUrl": { "type": "string", "format": "uri", "description": "Optional image URL for the post." },
+        "imageUrl": { "type": "string", "description": "Optional image for the post, stored as a Base64 data URI.", "contentEncoding": "base64", "media": { "type": "image/*" } },
         "condition": { "type": "string", "enum": ["Clean", "Full", "Overflowing", "Damaged"], "description": "The reported condition of the waste bin."},
         "taggedNagarpalika": { "type": "boolean", "description": "Indicates if the municipality is tagged." },
         "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of when the post was created." },
