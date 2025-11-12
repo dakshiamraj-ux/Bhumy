@@ -1,7 +1,7 @@
 
 /**
  * @file Firestore Security Rules for Bhumy - AI-Powered Circular Waste Management App
- * @core_philosophy This ruleset enforces a strict user-ownership model for private user data and allows public read access for certain collections (rewards, articles).
+ * @core_philosophy This ruleset enforces a strict user-ownership model for private user data and allows public read access for certain collections (rewards, articles, posts).
  * @data_structure User-specific data is nested under /users/{userId}, while public data resides in top-level collections.
  * @key_security_decisions User listing is disallowed. Public collections are readable by all.  Writes to user-owned data are restricted to the owning user.
  * @denormalization None yet. Future collaboration features may require denormalization.
@@ -176,5 +176,44 @@ service cloud.firestore {
       allow get, list: if true;
       allow write: if false;
     }
+
+     /**
+     * @description Rules for Bhumy Media posts.
+     * @path /posts/{postId}
+     * @allow (read) Any signed-in user can read posts.
+     * @allow (create) Signed-in users can create posts.
+     * @allow (update, delete) Only the owner of the post can update or delete it.
+     * @principle Public content feed with user ownership for writes.
+     */
+    match /posts/{postId} {
+        allow get, list: if isSignedIn();
+
+        allow create: if isSignedIn() 
+                      && request.resource.data.userId == request.auth.uid;
+        allow update: if isExistingOwner(request.resource.data.userId) 
+                      && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(resource.data.userId);
+    }
+
+    /**
+     * @description Rules for comments on posts.
+     * @path /posts/{postId}/comments/{commentId}
+     * @allow (read) Any signed-in user can read comments.
+     * @allow (create) Signed-in users can create comments.
+     * @allow (update, delete) Only the owner of the comment can update or delete it.
+     * @principle Public content with user ownership for writes.
+     */
+    match /posts/{postId}/comments/{commentId} {
+        allow get, list: if isSignedIn();
+
+        allow create: if isSignedIn()
+                      && request.resource.data.userId == request.auth.uid;
+        allow update: if isExistingOwner(request.resource.data.userId) 
+                      && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(resource.data.userId);
+    }
+
   }
 }
+
+    

@@ -19,7 +19,8 @@
         "aiPolicyAdvisor": "AI Policy Advisor",
         "chatWithBhumy": "Chat with Bhumy",
         "educationHub": "Education Hub",
-        "deviceHub": "Device Hub"
+        "deviceHub": "Device Hub",
+        "bhumyMedia": "Bhumy Media"
     },
     "page_titles": {
         "dashboard": "Dashboard",
@@ -30,6 +31,9 @@
         "policyAdvisor": "AI Local Policy Advisor",
         "chat": "Chat with Bhumy",
         "education": "Environmental Education Hub",
-        "devices": "Device Hub"
+        "devices": "Device Hub",
+        "bhumyMedia": "Bhumy Media"
     }
 }
+
+    

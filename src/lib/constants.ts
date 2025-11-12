@@ -1,3 +1,4 @@
+
 import {
   BarChart3,
   BookOpen,
@@ -9,6 +10,7 @@ import {
   Trophy,
   type LucideIcon,
   HardDrive,
+  Rss,
 } from 'lucide-react';
 
 type NavLink = {
@@ -24,6 +26,12 @@ export const NAV_LINKS: NavLink[] = [
     labelKey: 'nav.dashboard',
     icon: LayoutDashboard,
     tooltipKey: 'nav.dashboard',
+  },
+  {
+    href: '/bhumy-media',
+    labelKey: 'nav.bhumyMedia',
+    icon: Rss,
+    tooltipKey: 'nav.bhumyMedia',
   },
   {
     href: '/scanner',
@@ -82,6 +90,7 @@ type PageTitle = {
 
 export const PAGE_TITLES: { [key: string]: PageTitle } = {
   dashboard: { href: '/', titleKey: 'page_titles.dashboard' },
+  bhumyMedia: { href: '/bhumy-media', titleKey: 'page_titles.bhumyMedia' },
   scanner: { href: '/scanner', titleKey: 'page_titles.scanner' },
   footprint: { href: '/footprint', titleKey: 'page_titles.footprint' },
   rewards: { href: '/rewards', titleKey: 'page_titles.rewards' },
@@ -93,3 +102,5 @@ export const PAGE_TITLES: { [key: string]: PageTitle } = {
 };
 
 export const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://your-production-url.com' : 'http://localhost:9002';
+
+    

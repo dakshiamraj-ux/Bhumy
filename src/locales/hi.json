@@ -19,7 +19,8 @@
         "aiPolicyAdvisor": "एआई नीति सलाहकार",
         "chatWithBhumy": "भूमि के साथ चैट करें",
         "educationHub": "शिक्षा केंद्र",
-        "deviceHub": "डिवाइस हब"
+        "deviceHub": "डिवाइस हब",
+        "bhumyMedia": "भूमि मीडिया"
     },
     "page_titles": {
         "dashboard": "डैशबोर्ड",
@@ -30,6 +31,9 @@
         "policyAdvisor": "एआई स्थानीय नीति सलाहकार",
         "chat": "भूमि के साथ चैट करें",
         "education": "पर्यावरण शिक्षा केंद्र",
-        "devices": "डिवाइस हब"
+        "devices": "डिवाइस हब",
+        "bhumyMedia": "भूमि मीडिया"
     }
 }
+
+    
